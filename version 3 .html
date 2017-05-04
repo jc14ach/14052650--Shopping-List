@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		<!-- <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css"> -->
+		
+		<!-- use classic CSS theme -->
+		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.0/jquery.mobile-1.4.0.min.css" />
+		<link rel="stylesheet" href="http://demos.jquerymobile.com/1.4.0/theme-classic/theme-classic.css" />
+		
+		<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+		<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+		<script type="text/javascript" src="http://dev.jtsage.com/cdn/spinbox/latest/jqm-spinbox.min.js"></script>
+		<style>
+			.ui-checkbox input, .ui-radio input {
+				width: 30px;
+				height: 30px;
+			}
+			
+			.ui-listview>.ui-li-static {
+			    height: 65px;
+				padding-top: 3px;
+			}
+			
+			.ui-listview>.ui-li-static:hover {
+				background-color: #dcdcdc;
+			}
+			
+			.ui-input-text {
+				/* width: 85%; */
+				margin-right: 20px;
+			}
+		</style>
+		<script>
+		$( document ).ready(function() {
+		
+			// to empty list
+			//localStorage.setItem("addedItems",JSON.stringify([]));
+
+		    var addedItems = localStorage.getItem("addedItems");
+			if (addedItems == null) {
+				addedItems = [];
+			}
+			else {
+				addedItems = JSON.parse(addedItems);
+				generateList();
+				
+				$('ul').listview('refresh');
+			}
+			
+			// Change styling when page has loaded
+			$('#addItemInput').css('width: 85%');
+			
+			// This is for when enter button is used, because browser doesn't allow it as on file:// not http://
+			$(document).keypress(function(event){
+
+			var keycode = (event.keyCode ? event.keyCode : event.which);
+			if(keycode == '13'){
+				// checks whether input box is in focus
+				if ($('#addItemInput').is(":focus")) {
+					addItem();
+				}
+			}
+
+			})
+
+			$('#addItemButton').click(function() {
+				addItem();
+			})
+			
+			$('#removeTicks').click(function() {
+				$( ":checkbox" ).prop('checked',false);
+			})
+			
+			function addItem() {
+				var itemName = $('#addItemInput').val();
+				console.log(itemName);
+				if (itemName != "") {
+					addedItems.push(itemName);
+					addedItems = addedItems.sort();
+					
+					generateList();
+
+					saveItem();
+				}
+				
+				$('#addItemInput').val("");
+			}
+			
+			function generateList()
+			{
+				$('ul').empty();
+			
+				for (var i = 0; i < addedItems.length; i++) {
+					$('ul').append(
+					
+					'<li>'
+						+ '<table style="width: 100%">'
+							+ '<tr>'
+								+ '<td>'
+									+ '<div style="display: inline-block; margin-bottom: 10px;">'
+										+ '<input type="checkbox" id="checkbox-' + addedItems[i] + '" class="custom">'
+									+ '</div>'
+									+ '<div style="display: inline-block; margin-left: 52px; font-size: 22px;">'
+										+ addedItems[i]
+									+ '</div>'
+								+ '</td>'
+								+ '<td style="float: right;">'
+									+ '<div style="display: inline-block; margin-right: 6px;">'
+										+ '<input type="text" data-role="spinbox" name="spin" id="spin-' + addedItems[i] + '" value="1" min="0" max="100">'
+									+ '</div>'
+									+ '<div style="display: inline-block;">'
+										+ '<input type="button" value="Delete" id="deleteButton-' + addedItems[i] + '" data-inline="true">'
+									+' </div>'
+								+ '</td>'
+							+ '</tr>'
+						+ '</table>'
+					+ '</li>'
+					);
+				}
+
+				// refresh elements so that dynamically added elements have jQuery mobile styling added
+				$('ul').listview('refresh').trigger("create");
+			}
+		
+			function saveItem()
+			{
+				localStorage.setItem("addedItems",JSON.stringify(addedItems));
+			}
+		});
+
+		</script>
+	</head>
+	<body>
+		<div data-role="page" data-theme="b" data-content-theme="b" id="home">
+		  <div data-role="main" class="ui-content">
+			<h2>Shopping List</h2>
+			<form class="ui-filterable" style="display: inline-flex; width: 100%;">
+			  <input type="text" placeholder="Add item" id="addItemInput" value="">
+			  <input type="button" data-icon="plus" value="Add Item" id="addItemButton" onclick="$.mobile.changePage('#addItem');">
+			</form>
+			<input type="button" data-icon="check" value="Uncheck All Boxes" id="removeTicks">
+			<input type="button" data-icon="minus" value="Delete List" id="deleteList">
+			
+			<ul data-role="listview" data-filter="true" data-input="#myFilter" data-autodividers="true" data-inset="true">
+		   
+		   
+		   </ul>
+		  </div>
+		</div>
+
+		<div data-role="page" data-theme="b" data-content-theme="b" id="addItemPage">
+		  <div data-role="main" class="ui-content">
+			<button onclick="$.mobile.changePage('#pageone');">Choose Again</button>
+		  </div>
+		</div>
+	</body>
+</html>
