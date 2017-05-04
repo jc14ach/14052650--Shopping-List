@@ -1,0 +1,20 @@
+.ui-checkbox input, .ui-radio input {
+    width: 25px;
+    height: 25px;
+}
+.ui-listview>.ui-li-static {
+    /* height: 65px;
+    padding-top: 3px; */
+    padding: 0;
+}
+.ui-listview>.ui-li-static:hover {
+    background-color: #dcdcdc;
+}
+.ui-input-text {
+    margin-right: 20px;
+}
+
+.autocomplete-suggestions { border: 1px solid #999; background: #fff; cursor: default; overflow: auto; width: 200px; }
+.autocomplete-suggestion { padding: 10px 5px; font-size: 1.2em; white-space: nowrap; overflow: hidden; width: 200px; }
+.autocomplete-selected { background: #f0f0f0; width: 200px; }
+.autocomplete-suggestions strong { font-weight: normal; color: #3399ff; width: 200px; }
